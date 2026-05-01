@@ -1,6 +1,6 @@
 ---
 name: wechat-daily-report-skill
-description: 生成微信群聊日报。用于用户要求“生成微信群日报/聊天记录日报/群聊总结长图/把今天群聊整理成网页或长图”时。输出新版日报 HTML 和 PNG，包含今日剧情、聊天气泡、资料收纳、问答、成员观察和成员过滤。
+description: 生成微信群聊日报。优先用 jackwener/wx-cli 获取本地微信聊天记录，再输出新版日报 HTML 和 PNG，包含今日剧情、聊天气泡、资料收纳、问答、成员观察和成员过滤。
 ---
 
 # WeChat Daily Report Skill
@@ -18,26 +18,25 @@ description: 生成微信群聊日报。用于用户要求“生成微信群日�
 
 优先根据用户已有数据选择路线：
 
+- 用户希望用 `jackwener/wx-cli`：使用 `scripts/wx_cli_to_report.py`
+- 用户给了本地 `wechat-cli-pkg.tar.gz`：解压后用 `scripts/wx_cli_to_report.py --binary <wechat-cli>`
 - 已有 `stats.json` 和 `ai_content.json`：直接渲染
 - 已有聊天文本、WeFlow 导出、其他 JSON：先整理为 `stats.json`，再按 `references/ai_prompt.md` 生成 `ai_content.json`
 - 要读本机微信数据库：执行本仓库内置解密和分析脚本
 
 不要默认承诺“安装到 Obsidian 后自动打通微信”。本 skill 负责生成日报素材；Obsidian 侧是归档和浏览。
 
-### 2. 本机微信数据库路线
+### 2. wx-cli 路线
 
 ```bash
-python3 scripts/setup_check.py --ensure-decryptor
-python3 scripts/decrypt_wechat.py
-python3 scripts/list_wechat_groups.py
+wx sessions
 ```
 
-确认群名后：
-
 ```bash
-python3 scripts/analyze_chat.py \
+python3 scripts/wx_cli_to_report.py \
   --chatroom "<群名或 chatroom id>" \
   --date YYYY-MM-DD \
+  --limit 5000 \
   --output-stats stats.json \
   --output-text simplified_chat.txt
 ```
@@ -45,7 +44,19 @@ python3 scripts/analyze_chat.py \
 产物：
 
 - `stats.json`
-- `simplified_chat.txt` 或 `simplified_chat_*.txt`
+- `simplified_chat.txt`
+
+如果使用本地 wechat-cli 包：
+
+```bash
+python3 scripts/wx_cli_to_report.py \
+  --binary "<解压后的 wechat-cli 二进制路径>" \
+  --chatroom "<群名或 chatroom id>" \
+  --date YYYY-MM-DD \
+  --limit 5000 \
+  --output-stats stats.json \
+  --output-text simplified_chat.txt
+```
 
 ### 3. 生成 AI 内容
 
@@ -93,6 +104,12 @@ python3 scripts/generate_report.py \
 
 ```bash
 python3 -m py_compile scripts/*.py
+python3 scripts/wx_cli_to_report.py \
+  --input-json examples/wx_cli_history_sample.json \
+  --chatroom "Dont哥 对谈群" \
+  --date 2026-04-30 \
+  --output-stats examples/wx_stats_from_sample.json \
+  --output-text examples/wx_simplified_chat_sample.txt
 python3 scripts/generate_report.py \
   --stats examples/sample_stats.json \
   --ai-content examples/sample_ai_content.json \

@@ -2,7 +2,7 @@
 
 把微信群聊天记录整理成一份可阅读、可截图、可归档的「群日报」。
 
-这版重点重做了 UI：不再是普通统计卡片，而是接近你喜欢的群日报页面形式：左侧目录与成员过滤，右侧是今日剧情、聊天气泡、资料收纳、问答和成员观察。HTML 可以交互查看，PNG 可以直接发群或放进 Obsidian。
+这版重点重做了 UI，也把数据入口调整为优先使用 `jackwener/wx-cli`：`wx-cli` 负责从本机微信获取聊天记录，本仓库负责把记录整理成日报 HTML/PNG。
 
 ## 预览
 
@@ -21,6 +21,7 @@
 - 用聊天气泡还原关键对话，不只是统计数字
 - 输出交互式 HTML 和可分享 PNG 长图
 - 支持按成员过滤相关内容
+- 默认用 `jackwener/wx-cli` 获取本地微信聊天记录
 - 可以作为 Obsidian 归档素材：把 HTML/PNG/生成的 Markdown 放进 vault 即可
 
 ## 不能误解的地方
@@ -35,10 +36,12 @@
 
 | 方式 | 适合场景 | 说明 |
 | --- | --- | --- |
-| 手工导出的聊天文本/JSON | 最快试用 | 直接让 AI 按 `references/ai_prompt.md` 生成 `ai_content.json`，再渲染 |
-| WeFlow | 推荐长期方案 | 适合做本地导出、解密、年报、本地 API，后续可以接适配器 |
+| jackwener/wx-cli | 推荐主路线 | 直接查询本地微信聊天记录，本仓库已内置 `scripts/wx_cli_to_report.py` 适配 |
+| 本地 wechat-cli 包 | 备用路线 | 如果装不了 `wx`，可以用你本地的 `wechat-cli` 二进制，通过 `--binary` 指定 |
+| 手工导出的聊天文本/JSON | 快速试用 | 直接让 AI 按 `references/ai_prompt.md` 生成 `ai_content.json`，再渲染 |
+| WeFlow | 后续扩展 | 适合做更完整的导出、解密、年报、本地 API |
 | CipherTalk | 底层参考 | 更适合参考微信数据库解密与读取思路 |
-| 本仓库内置脚本 | 本机微信数据分析 | 可从本地解密后的微信数据库里分析群聊并生成统计文件 |
+| 旧版本地解密脚本 | 兼容路线 | 仓库仍保留旧脚本，但优先推荐 wx-cli |
 
 更详细说明见 [数据来源说明](docs/data-sources.md)。
 
@@ -51,6 +54,21 @@ python3 -m pip install -r requirements.txt
 python3 -m playwright install chromium
 ```
 
+安装 `wx-cli`：
+
+```bash
+npm install -g @jackwener/wx-cli
+```
+
+macOS 首次使用按 `wx-cli` 官方要求初始化：
+
+```bash
+codesign --force --deep --sign - /Applications/WeChat.app
+killall WeChat && open /Applications/WeChat.app
+sudo wx init
+wx sessions
+```
+
 如果你要作为 Codex/Claude Skill 使用，也可以把仓库放到对应 skills 目录：
 
 ```bash
@@ -59,6 +77,19 @@ git clone https://github.com/siuserxiaowei/wechat-daily-report-skill.git ~/.code
 ```
 
 ## 先跑一遍示例
+
+从 wx-cli JSON 样例生成日报输入：
+
+```bash
+python3 scripts/wx_cli_to_report.py \
+  --input-json examples/wx_cli_history_sample.json \
+  --chatroom "Dont哥 对谈群" \
+  --date 2026-04-30 \
+  --output-stats examples/wx_stats_from_sample.json \
+  --output-text examples/wx_simplified_chat_sample.txt
+```
+
+渲染内置完整示例：
 
 ```bash
 python3 scripts/generate_report.py \
@@ -81,32 +112,46 @@ python3 scripts/generate_report.py \
 
 ## 生成真实群日报
 
-### 1. 准备微信数据
+### 1. 用 wx-cli 获取微信聊天记录
 
-如果你已经有 WeFlow、聊天导出工具、手工整理的聊天文本，直接进入第 3 步。
-
-如果你要用本仓库的本地数据库方式：
+确认能看到最近会话：
 
 ```bash
-python3 scripts/setup_check.py --ensure-decryptor
-python3 scripts/decrypt_wechat.py
-python3 scripts/list_wechat_groups.py
+wx sessions
 ```
 
-### 2. 分析目标群聊
+把某个群当天记录转成日报输入：
 
 ```bash
-python3 scripts/analyze_chat.py \
+python3 scripts/wx_cli_to_report.py \
   --chatroom "群名称或 chatroom id" \
   --date 2026-04-30 \
+  --limit 5000 \
   --output-stats stats.json \
-  --output-text simplified_chat.txt
+  --output-text simplified_chat.txt \
+  --raw-output raw_wx_history.json
 ```
 
 产物：
 
 - `stats.json`：消息数、活跃成员、话唠榜、词云等统计数据
 - `simplified_chat.txt`：压缩后的聊天文本，给 AI 生成日报内容用
+- `raw_wx_history.json`：原始 wx-cli 输出，便于排查
+
+### 2. 如果只能用本地 wechat-cli 包
+
+你提到的 `wechat-cli-pkg.tar.gz` 也能用。解压后直接把二进制路径传给适配器：
+
+```bash
+tar -xzf /path/to/wechat-cli-pkg.tar.gz -C /tmp/wechat-cli-pkg
+python3 scripts/wx_cli_to_report.py \
+  --binary /tmp/wechat-cli-pkg/wechat-cli-pkg/wechat-cli/node_modules/@canghe_ai/wechat-cli-darwin-arm64/bin/wechat-cli \
+  --chatroom "群名称或 chatroom id" \
+  --date 2026-04-30 \
+  --limit 5000 \
+  --output-stats stats.json \
+  --output-text simplified_chat.txt
+```
 
 ### 3. 生成 AI 内容
 
@@ -173,6 +218,7 @@ HTML 交互版：[[2026-04-30-report.html]]
 
 ```text
 assets/report_template.html      # 新版日报 UI 模板
+scripts/wx_cli_to_report.py      # wx-cli/wechat-cli 转日报输入
 scripts/analyze_chat.py          # 从本地微信数据生成 stats/simplified_chat
 scripts/generate_report.py       # Jinja2 渲染 HTML，并用 Playwright 输出 PNG
 references/ai_prompt.md          # AI 生成 ai_content.json 的提示词
@@ -183,6 +229,7 @@ SKILL.md                         # 给 Codex/Claude 使用的 Skill 说明
 
 ## 参考来源
 
+- 首选数据入口：[jackwener/wx-cli](https://github.com/jackwener/wx-cli)
 - UI 方向参考：[群日报示例页面](https://simonlin000.github.io/qun-riba-20260430/)
 - 原始 skill 思路参考：[ADVISORYDZ/wechat-daily-report-skill](https://github.com/ADVISORYDZ/wechat-daily-report-skill)
 - 数据导出方向参考：[hicccc77/WeFlow](https://github.com/hicccc77/WeFlow)

@@ -1,0 +1,58 @@
+[
+  {
+    "timestamp": 1777511400,
+    "time": "2026-04-30 09:10",
+    "sender": "Dont哥",
+    "content": "今天先把微信聊天记录到 Obsidian 的路线讲清楚。",
+    "type": "text",
+    "local_id": 1001
+  },
+  {
+    "timestamp": 1777511700,
+    "time": "2026-04-30 09:15",
+    "sender": "小魏",
+    "content": "我想要的是能看到聊天资料、文件、链接，还有每天的聊天日报。",
+    "type": "text",
+    "local_id": 1002
+  },
+  {
+    "timestamp": 1777515600,
+    "time": "2026-04-30 10:20",
+    "sender": "HOORAY",
+    "content": "wx-cli 可以直接查本地微信数据，日报这边只要接 history JSON。",
+    "type": "text",
+    "local_id": 1003
+  },
+  {
+    "timestamp": 1777515900,
+    "time": "2026-04-30 10:25",
+    "sender": "Dont哥",
+    "content": "那就让 wx-cli 做数据入口，我们只负责转 stats 和 simplified_chat。",
+    "type": "text",
+    "local_id": 1004
+  },
+  {
+    "timestamp": 1777555200,
+    "time": "2026-04-30 21:20",
+    "sender": "小魏",
+    "content": "README 里必须写清楚：wx-cli 获取记录，AI 生成 ai_content，最后渲染 HTML 和 PNG。",
+    "type": "text",
+    "local_id": 1005
+  },
+  {
+    "timestamp": 1777561080,
+    "time": "2026-04-30 22:58",
+    "sender": "HOORAY",
+    "content": "本地 tar 包可以做 fallback，命令叫 wechat-cli，参数和 wx 有点不一样。",
+    "type": "text",
+    "local_id": 1006
+  },
+  {
+    "timestamp": 1777564380,
+    "time": "2026-04-30 23:53",
+    "sender": "小魏",
+    "content": "可以，适配器写成 auto，先找 wx，没有再找 wechat-cli。",
+    "type": "text",
+    "local_id": 1007
+  }
+]

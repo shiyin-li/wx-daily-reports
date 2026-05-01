@@ -15,5 +15,6 @@ vendor/
 stats.json
 ai_content.json
 simplified_chat*.txt
+raw_wx_history.json
 report.html
 report.png

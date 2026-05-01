@@ -7,6 +7,61 @@
 
 所以数据来源可以换，不需要被某一种工具绑死。
 
+## 推荐方案：jackwener/wx-cli
+
+现在推荐把 `jackwener/wx-cli` 作为微信聊天记录入口。
+
+安装：
+
+```bash
+npm install -g @jackwener/wx-cli
+```
+
+初始化后，确认能读取会话：
+
+```bash
+wx sessions
+```
+
+生成日报输入：
+
+```bash
+python3 scripts/wx_cli_to_report.py \
+  --chatroom "群名称或 chatroom id" \
+  --date 2026-04-30 \
+  --limit 5000 \
+  --output-stats stats.json \
+  --output-text simplified_chat.txt \
+  --raw-output raw_wx_history.json
+```
+
+内部等价于调用：
+
+```bash
+wx history "群名称或 chatroom id" --since 2026-04-30 --until 2026-04-30 -n 5000 --json
+```
+
+## 备用方案：本地 wechat-cli 包
+
+如果暂时获取不到 `wx-cli`，可以用本地的 `wechat-cli-pkg.tar.gz`：
+
+```bash
+tar -xzf /path/to/wechat-cli-pkg.tar.gz -C /tmp/wechat-cli-pkg
+python3 scripts/wx_cli_to_report.py \
+  --binary /tmp/wechat-cli-pkg/wechat-cli-pkg/wechat-cli/node_modules/@canghe_ai/wechat-cli-darwin-arm64/bin/wechat-cli \
+  --chatroom "群名称或 chatroom id" \
+  --date 2026-04-30 \
+  --limit 5000 \
+  --output-stats stats.json \
+  --output-text simplified_chat.txt
+```
+
+适配器会按 `wechat-cli` 参数调用：
+
+```bash
+wechat-cli history "群名称或 chatroom id" --start-time 2026-04-30 --end-time 2026-04-30 --limit 5000 --format json
+```
+
 ## 方案 A：手工导出的聊天文本
 
 适合最快试用。
@@ -20,7 +75,7 @@
 
 适合长期方案。
 
-WeFlow 做得更靠近完整产品路线：导出、解密、年报、本地 API 都可以作为上游能力。本仓库可以把 WeFlow 输出的数据转成下面两个文件：
+WeFlow 做得更靠近完整产品路线：导出、解密、年报、本地 API 都可以作为另一个上游能力。本仓库可以把 WeFlow 输出的数据转成下面两个文件：
 
 ```text
 stats.json
