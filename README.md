@@ -10,6 +10,7 @@
 
 本仓库内置示例：
 
+- [在线预览](https://siuserxiaowei.github.io/wechat-daily-report-skill/)
 - [HTML 预览](examples/qun-ribao-demo.html)
 - [PNG 长图](examples/qun-ribao-demo.png)
 
