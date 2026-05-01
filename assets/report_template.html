@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ meta.name }} · 群日报 · {{ meta.date }}</title>
+  <style>
+    :root {
+      --paper: #f3f5ef;
+      --paper-2: #e7eee8;
+      --ink: #20231f;
+      --muted: #687067;
+      --line: #d8ded2;
+      --card: #ffffff;
+      --card-strong: #f3f7ef;
+      --rust: #b45f2a;
+      --rust-deep: #7a351f;
+      --green: #287a5b;
+      --blue: #415f8f;
+      --gold: #d39b35;
+      --violet: #8b5a86;
+      --shadow: 0 22px 60px rgba(79, 48, 22, 0.14);
+      --radius: 8px;
+      --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font-mono: "SFMono-Regular", "Cascadia Mono", "Menlo", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at 16% 8%, rgba(117, 161, 122, 0.22), transparent 28%),
+        linear-gradient(135deg, #f8f9f4 0%, #e7efe8 52%, #f4efe7 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(85, 59, 34, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(85, 59, 34, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 90%);
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 28px;
+      width: min(1180px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      height: calc(100vh - 48px);
+      overflow: auto;
+      padding: 20px;
+      border: 1px solid rgba(122, 53, 31, 0.16);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      padding: 8px 6px 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .brand-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--rust);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .brand h1 {
+      margin: 10px 0 6px;
+      font-size: 25px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .brand-date {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .side-section {
+      margin: 20px 0;
+    }
+
+    .side-title {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-link,
+    .member-chip,
+    .topic-mini {
+      width: 100%;
+      border: 0;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      border-radius: 6px;
+      color: var(--muted);
+    }
+
+    .nav-link:hover { background: rgba(40, 122, 91, 0.08); color: var(--green); }
+
+    .member-chip {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      padding: 9px;
+      margin-bottom: 7px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: rgba(248, 250, 246, 0.72);
+    }
+
+    .member-chip:hover,
+    .member-chip.active {
+      background: #eef6ef;
+      border-color: rgba(40, 122, 91, 0.22);
+      color: var(--green);
+    }
+
+    .mini-avatar,
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--rust), var(--gold));
+    }
+
+    .mini-avatar { width: 30px; height: 30px; font-size: 12px; }
+    .avatar { width: 42px; height: 42px; flex: 0 0 auto; }
+    .avatar img, .mini-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .member-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    .member-count {
+      color: var(--muted);
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .topic-mini {
+      display: block;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      background: rgba(246, 249, 243, 0.86);
+      border: 1px solid rgba(216, 222, 210, 0.9);
+    }
+
+    .topic-mini strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--rust-deep);
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topic-mini span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 360px;
+      padding: 34px;
+      border-radius: var(--radius);
+      color: #fff9ed;
+      background:
+        linear-gradient(135deg, rgba(31, 43, 36, 0.95), rgba(54, 73, 84, 0.92), rgba(116, 55, 35, 0.88)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 10px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "日报";
+      position: absolute;
+      right: -18px;
+      bottom: -34px;
+      font-size: 170px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.08);
+      line-height: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 20px;
+      color: #ffe0b2;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero-subtitle {
+      margin: 22px 0 0;
+      max-width: 560px;
+      color: rgba(255, 249, 237, 0.78);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 32px;
+      max-width: 640px;
+    }
+
+    .metric {
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      font-family: var(--font-mono);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,249,237,0.68);
+      font-size: 12px;
+    }
+
+    .filter-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0 0;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: #eef6ef;
+      border: 1px solid rgba(40, 122, 91, 0.24);
+      color: var(--green);
+    }
+
+    .filter-banner.show { display: flex; }
+
+    .clear-filter {
+      border: 0;
+      border-radius: 6px;
+      background: var(--green);
+      color: white;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 14px;
+    }
+
+    .section-heading h3 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .event-card,
+    .grid-card {
+      border: 1px solid rgba(122, 53, 31, 0.14);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 14px 40px rgba(79, 48, 22, 0.08);
+    }
+
+    .event-card {
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .event-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px 16px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .event-head h4 {
+      margin: 0;
+      color: var(--rust-deep);
+      font-size: 21px;
+      line-height: 1.32;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      color: var(--blue);
+      background: rgba(65, 95, 143, 0.1);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .event-body {
+      padding: 20px 24px 24px;
+    }
+
+    .summary {
+      margin: 0;
+      color: #514337;
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    .bubbles {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .bubble-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+    }
+
+    .bubble-row.is-right {
+      flex-direction: row-reverse;
+    }
+
+    .bubble {
+      position: relative;
+      max-width: min(680px, 78%);
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid rgba(222, 205, 183, 0.82);
+      color: #352a21;
+      line-height: 1.72;
+    }
+
+    .bubble-row.is-right .bubble {
+      background: #e5f4e9;
+      border-color: rgba(40, 122, 91, 0.18);
+    }
+
+    .bubble-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bubble-row.is-right .bubble-meta {
+      justify-content: flex-end;
+    }
+
+    .bubble-name {
+      color: var(--rust);
+      font-weight: 800;
+    }
+
+    .bubble-row.is-right .bubble-name { color: var(--green); }
+
+    .highlight {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: #f2f6eb;
+      color: var(--rust-deep);
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-card {
+      padding: 20px;
+    }
+
+    .card-label {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      color: var(--green);
+      background: rgba(40, 122, 91, 0.1);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .grid-card h4 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .grid-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .points {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      color: #514337;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .qa-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid rgba(122, 53, 31, 0.14);
+      margin-bottom: 14px;
+    }
+
+    .qa-block {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: #f5f4ee;
+    }
+
+    .qa-block.answer {
+      background: #e7f2ef;
+    }
+
+    .qa-role {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .qa-block h4 {
+      margin: 8px 0 8px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .qa-block p {
+      margin: 0;
+      color: #514337;
+      line-height: 1.72;
+      font-size: 14px;
+    }
+
+    .rank-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .rank-card {
+      padding: 18px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      border: 1px solid rgba(122, 53, 31, 0.14);
+    }
+
+    .rank-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .rank-index {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .rank-name {
+      min-width: 0;
+      font-weight: 900;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rank-count {
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--font-mono);
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(180, 95, 42, 0.1);
+      color: var(--rust-deep);
+      font-size: 12px;
+    }
+
+    .word-cloud {
+      position: relative;
+      height: 310px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(122, 53, 31, 0.14);
+    }
+
+    .word {
+      position: absolute;
+      transform: translate(-50%, -50%) rotate(var(--rotate));
+      font-weight: 900;
+      white-space: nowrap;
+      opacity: 0.9;
+    }
+
+    .footer {
+      margin: 28px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .hidden-by-filter {
+      display: none !important;
+    }
+
+    body.is-capturing .sidebar {
+      position: static;
+      height: auto;
+    }
+
+    @media (max-width: 880px) {
+      .shell {
+        display: block;
+        width: min(100vw - 24px, 640px);
+        padding: 12px 0 36px;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        margin-bottom: 16px;
+      }
+
+      .hero { padding: 26px; min-height: 320px; }
+      .hero::after { font-size: 110px; }
+      .metrics, .card-grid, .rank-grid, .qa-card { grid-template-columns: 1fr; }
+      .bubble { max-width: 84%; }
+      .section-heading { display: block; }
+      .section-heading p { margin-top: 6px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .shell { width: 1120px; }
+      .sidebar { position: sticky; }
+    }
+  </style>
+</head>
+
+<body>
+  {% macro avatar(avatar_url, name, class_name='avatar') -%}
+    <span class="{{ class_name }}">
+      {% if avatar_url %}
+        <img src="{{ avatar_url }}" alt="{{ name }}">
+      {% else %}
+        {{ (name or '?')[:1] }}
+      {% endif %}
+    </span>
+  {%- endmacro %}
+
+  {% set topics = ai_content.topics or [] %}
+  {% set resources = ai_content.resources or [] %}
+  {% set important_messages = ai_content.important_messages or [] %}
+  {% set dialogues = ai_content.dialogues or [] %}
+  {% set qas = ai_content.qas or [] %}
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-kicker">WeChat Daily</div>
+        <h1>{{ meta.name or '微信群' }}日报</h1>
+        <div class="brand-date">{{ meta.date }} · {{ meta.time_range }}</div>
+      </div>
+
+      <div class="side-section">
+        <p class="side-title">跳转</p>
+        <a class="nav-link" href="#story"><span>今日剧情</span><span>→</span></a>
+        <a class="nav-link" href="#dialogues"><span>聊天现场</span><span>→</span></a>
+        <a class="nav-link" href="#resources"><span>资料收纳</span><span>→</span></a>
+        <a class="nav-link" href="#people"><span>成员观察</span><span>→</span></a>
+      </div>
+
+      {% if top_talkers %}
+      <div class="side-section">
+        <p class="side-title">按成员过滤</p>
+        <button class="member-chip active" data-member="__all__">
+          <span class="mini-avatar">全</span>
+          <span class="member-name">全部消息</span>
+          <span class="member-count">{{ meta.total_count }}</span>
+        </button>
+        {% for talker in top_talkers %}
+        <button class="member-chip" data-member="{{ talker.name }}">
+          {{ avatar(talker.avatar, talker.name, 'mini-avatar') }}
+          <span class="member-name">{{ talker.name }}</span>
+          <span class="member-count">{{ talker.count }}</span>
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if topics %}
+      <div class="side-section">
+        <p class="side-title">今日关键词</p>
+        {% for topic in topics[:5] %}
+        <a class="topic-mini" href="#topic-{{ loop.index }}">
+          <strong>{{ topic.title }}</strong>
+          <span>{{ topic.category }} · {{ topic.mention_count or '热议' }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-content">
+          <div class="hero-kicker">群聊日报 · {{ meta.date }}</div>
+          <h2>{{ meta.name or '今日群聊' }}</h2>
+          <p class="hero-subtitle">今天群里聊了什么、谁在输出、哪些资料值得捡起来，这份日报把消息流整理成可以回看的事件现场。</p>
+          <div class="metrics">
+            <div class="metric">
+              <strong>{{ meta.total_count or 0 }}</strong>
+              <span>总消息数</span>
+            </div>
+            <div class="metric">
+              <strong>{{ meta.active_user_count or 0 }}</strong>
+              <span>活跃成员</span>
+            </div>
+            <div class="metric">
+              <strong>{{ meta.time_range or '-' }}</strong>
+              <span>统计周期</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="filter-banner" id="filterBanner">
+        <span id="filterText">正在查看某位成员相关内容</span>
+        <button class="clear-filter" data-member="__all__">显示全部</button>
+      </div>
+
+      {% if topics %}
+      <section class="section" id="story">
+        <div class="section-heading">
+          <h3>今日剧情</h3>
+          <p>把松散聊天整理成几段可回看的事件。</p>
+        </div>
+        {% for topic in topics %}
+        <article class="event-card" id="topic-{{ loop.index }}">
+          <header class="event-head">
+            <h4>{{ topic.title }}</h4>
+            <div class="tags">
+              <span class="tag">{{ topic.category }}</span>
+              {% for kw in topic.keywords[:4] %}
+              <span class="tag">{{ kw }}</span>
+              {% endfor %}
+            </div>
+          </header>
+          <div class="event-body">
+            <p class="summary">{{ topic.summary }}</p>
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% if dialogues %}
+      <section class="section" id="dialogues">
+        <div class="section-heading">
+          <h3>聊天现场</h3>
+          <p>用气泡还原当天最值得回看的对话。</p>
+        </div>
+        {% for dialogue in dialogues %}
+        {% set member_names = dialogue.messages | map(attribute='name') | join('|') %}
+        <article class="event-card filterable" data-members="{{ member_names }}">
+          <header class="event-head">
+            <h4>{{ dialogue.topic }}</h4>
+            <div class="tags">
+              {% for msg in dialogue.messages[:4] %}
+              <span class="tag">{{ msg.name }}</span>
+              {% endfor %}
+            </div>
+          </header>
+          <div class="event-body">
+            <div class="bubbles">
+              {% for msg in dialogue.messages %}
+              <div class="bubble-row {% if loop.index is even %}is-right{% endif %}">
+                {{ avatar(msg.avatar, msg.name) }}
+                <div class="bubble">
+                  <div class="bubble-meta">
+                    <span class="bubble-name">{{ msg.name }}</span>
+                    <span>{{ msg.time }}</span>
+                  </div>
+                  <div>{{ msg.content }}</div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% if dialogue.highlight %}
+            <div class="highlight">金句：{{ dialogue.highlight }}</div>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      {% if resources or important_messages %}
+      <section class="section" id="resources">
+        <div class="section-heading">
+          <h3>资料收纳</h3>
+          <p>链接、经验、教程、避坑和重要信息统一捡起来。</p>
+        </div>
+        <div class="card-grid">
+          {% for res in resources %}
+          <article class="grid-card filterable" data-members="{{ res.sharer }}">
+            <span class="card-label">{{ res.type or res.category or '资源' }}</span>
+            <h4>{{ res.title }}</h4>
+            <p>{{ res.description }}</p>
+            <p style="margin-top: 10px;">分享者：<strong>{{ res.sharer }}</strong> · {{ res.time }}</p>
+            {% if res.key_points %}
+            <ul class="points">
+              {% for point in res.key_points %}
+              <li>{{ point }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% if res.url %}
+            <p style="margin-top: 12px;"><a href="{{ res.url }}">打开链接 →</a></p>
+            {% endif %}
+          </article>
+          {% endfor %}
+
+          {% for msg in important_messages %}
+          <article class="grid-card filterable" data-members="{{ msg.sender }}">
+            <span class="card-label">{{ msg.priority or '重要' }}</span>
+            <h4>{{ msg.summary }}</h4>
+            <p>{{ msg.content }}</p>
+            <p style="margin-top: 10px;">{{ msg.sender }} · {{ msg.time }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if qas %}
+      <section class="section" id="qa">
+        <div class="section-heading">
+          <h3>问答收纳</h3>
+          <p>群友互助、抽象提问和最佳回答都集中到这里。</p>
+        </div>
+        {% for qa in qas %}
+        <article class="qa-card filterable" data-members="{{ qa.questioner }}|{{ qa.answerer }}">
+          <div class="qa-block">
+            <div class="qa-role">Question · {{ qa.question_time }}</div>
+            <h4>{{ qa.questioner }}：{{ qa.question }}</h4>
+            {% if qa.tags %}
+            <div class="pill-list">
+              {% for tag in qa.tags %}
+              <span class="pill">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="qa-block answer">
+            <div class="qa-role">Answer · {{ qa.answer_time }} {% if qa.is_best %}· Best{% endif %}</div>
+            <h4>{{ qa.answerer }}</h4>
+            <p>{{ qa.answer }}</p>
+          </div>
+        </article>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <section class="section" id="people">
+        <div class="section-heading">
+          <h3>成员观察</h3>
+          <p>今日输出量、常用词和深夜活跃情况。</p>
+        </div>
+        {% if top_talkers %}
+        <div class="rank-grid">
+          {% for talker in top_talkers %}
+          <article class="rank-card filterable" data-members="{{ talker.name }}">
+            <div class="rank-top">
+              {{ avatar(talker.avatar, talker.name) }}
+              <div style="min-width: 0;">
+                <div class="rank-index">#{{ talker.rank }}</div>
+                <div class="rank-name">{{ talker.name }}</div>
+                <div class="rank-count">{{ talker.count }} 条消息</div>
+              </div>
+            </div>
+            {% if talker.traits %}
+            <div class="pill-list">
+              {% for trait in talker.traits %}
+              <span class="pill">{{ trait }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% if talker.common_words %}
+            <div class="pill-list">
+              {% for word in talker.common_words %}
+              <span class="pill">{{ word }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </article>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if night_owl %}
+        <article class="event-card filterable" data-members="{{ night_owl.name }}" style="margin-top: 16px;">
+          <header class="event-head">
+            <h4>{{ night_owl.title or '熬夜冠军' }}：{{ night_owl.name }}</h4>
+            <div class="tags">
+              <span class="tag">最后发言 {{ night_owl.last_time }}</span>
+              <span class="tag">{{ night_owl.msg_count }} 条深夜消息</span>
+            </div>
+          </header>
+          <div class="event-body">
+            <p class="summary">最后一条夜间消息：{{ night_owl.last_msg }}</p>
+          </div>
+        </article>
+        {% endif %}
+      </section>
+
+      {% if word_cloud %}
+      <section class="section">
+        <div class="section-heading">
+          <h3>词语云</h3>
+          <p>群聊语气的现场指纹。</p>
+        </div>
+        <div class="word-cloud">
+          {% for word in word_cloud[:42] %}
+          <span
+            class="word"
+            style="left: {{ word.left }}%; top: {{ word.top }}px; color: {{ word.color }}; font-size: {{ word.size }}px; --rotate: {{ word.rotate }}deg;"
+            title="{{ word.count }}"
+          >{{ word.text }}</span>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <footer class="footer">
+        <p>Generated by WeChat Daily Report Skill · {{ generated_at }}</p>
+        <p>数据来源：{{ meta.name }}聊天记录 · {{ meta.date }} {{ meta.time_range }}</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const chips = Array.from(document.querySelectorAll('[data-member]'));
+    const filterables = Array.from(document.querySelectorAll('.filterable'));
+    const banner = document.getElementById('filterBanner');
+    const filterText = document.getElementById('filterText');
+
+    function setFilter(member) {
+      chips.forEach(chip => chip.classList.toggle('active', chip.dataset.member === member));
+      if (member === '__all__') {
+        filterables.forEach(item => item.classList.remove('hidden-by-filter'));
+        banner.classList.remove('show');
+        return;
+      }
+      filterables.forEach(item => {
+        const members = (item.dataset.members || '').split('|').map(v => v.trim()).filter(Boolean);
+        item.classList.toggle('hidden-by-filter', !members.includes(member));
+      });
+      filterText.textContent = `正在查看「${member}」相关内容`;
+      banner.classList.add('show');
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => setFilter(chip.dataset.member));
+    });
+  </script>
+</body>
+</html>

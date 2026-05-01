@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "name": "Dont哥 对谈群",
+    "date": "2026-04-30",
+    "total_count": 1268,
+    "active_user_count": 42,
+    "time_range": "09:10 至 23:58"
+  },
+  "top_talkers": [
+    {
+      "rank": 1,
+      "name": "Dont哥",
+      "count": 198,
+      "common_words": ["Obsidian", "微信", "资料", "自动化", "仓库"]
+    },
+    {
+      "rank": 2,
+      "name": "小魏",
+      "count": 164,
+      "common_words": ["日报", "截图", "UI", "GitHub", "配置"]
+    },
+    {
+      "rank": 3,
+      "name": "HOORAY",
+      "count": 137,
+      "common_words": ["WeFlow", "解密", "导出", "本地", "接口"]
+    }
+  ],
+  "night_owl": {
+    "name": "小魏",
+    "last_time": "23:58",
+    "msg_count": 23,
+    "last_msg": "先别睡，把 README 的截图也补上，不然仓库看起来像半成品。",
+    "title": "熬夜收尾官"
+  },
+  "word_cloud": [
+    {"text": "Obsidian", "count": 88, "size": 38, "color": "#7a351f", "left": 25, "top": 72, "rotate": -6},
+    {"text": "微信资料", "count": 74, "size": 34, "color": "#287a5b", "left": 56, "top": 92, "rotate": 5},
+    {"text": "日报", "count": 65, "size": 32, "color": "#b45f2a", "left": 72, "top": 152, "rotate": -3},
+    {"text": "WeFlow", "count": 48, "size": 28, "color": "#415f8f", "left": 31, "top": 178, "rotate": 8},
+    {"text": "截图", "count": 44, "size": 26, "color": "#d39b35", "left": 61, "top": 230, "rotate": -8},
+    {"text": "GitHub", "count": 39, "size": 24, "color": "#8b5a86", "left": 18, "top": 248, "rotate": 4},
+    {"text": "配置", "count": 31, "size": 22, "color": "#287a5b", "left": 82, "top": 62, "rotate": 7},
+    {"text": "聊天记录", "count": 28, "size": 21, "color": "#415f8f", "left": 46, "top": 286, "rotate": -4}
+  ]
+}

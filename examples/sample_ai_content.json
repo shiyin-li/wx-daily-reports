@@ -1,0 +1,153 @@
+{
+  "topics": [
+    {
+      "title": "把微信聊天记录塞进 Obsidian：从想法到路线图",
+      "category": "知识库",
+      "summary": "大家把目标拆清楚了：不是简单备份聊天，而是要在 Obsidian 里能翻资料、看文件、追溯上下文，最后形成可搜索、可复盘的本地知识库。",
+      "keywords": ["Obsidian", "微信", "知识库", "检索"],
+      "mention_count": 96
+    },
+    {
+      "title": "WeFlow 还是 CipherTalk：今天的技术路线大会",
+      "category": "工具选型",
+      "summary": "群里围绕本地导出、解密、API、年报能力聊了一轮，结论是 WeFlow 更像一站式入口，CipherTalk 更像底层思路和解密参考。",
+      "keywords": ["WeFlow", "CipherTalk", "导出", "API"],
+      "mention_count": 73
+    },
+    {
+      "title": "日报 UI 不能再像临时拼图了",
+      "category": "界面改版",
+      "summary": "原来的卡片堆叠太像模板，大家更喜欢带目录、聊天气泡、事件时间线的页面。日报应该像可回看的聊天现场，而不是一张冷冰冰的统计海报。",
+      "keywords": ["UI", "日报", "聊天气泡", "截图"],
+      "mention_count": 64
+    },
+    {
+      "title": "仓库要能直接交给别人用",
+      "category": "交付",
+      "summary": "讨论最后落到文档：仓库名、安装方式、配置说明、示例截图和参考来源都要写清楚，不能只丢一堆脚本让后来的人猜。",
+      "keywords": ["README", "GitHub", "Skill", "配置"],
+      "mention_count": 42
+    }
+  ],
+  "resources": [
+    {
+      "type": "参考项目",
+      "title": "WeFlow：微信数据导出与本地 API 方向",
+      "sharer": "HOORAY",
+      "time": "10:42",
+      "category": "工具",
+      "description": "适合做本地微信资料导出、解密和后续 API 化的参考路线。",
+      "key_points": ["更偏完整产品路线", "适合接 Obsidian/日报/检索", "后续可做适配器"],
+      "url": "https://github.com/hicccc77/WeFlow"
+    },
+    {
+      "type": "参考项目",
+      "title": "CipherTalk：微信数据库解密思路参考",
+      "sharer": "Dont哥",
+      "time": "10:47",
+      "category": "技术",
+      "description": "更适合作为底层解密与数据读取的思路来源。",
+      "key_points": ["关注解密链路", "可作为 WeFlow 之前的基础参考", "需要注意本地数据安全"]
+    },
+    {
+      "type": "设计参考",
+      "title": "群日报网页样式参考",
+      "sharer": "小魏",
+      "time": "14:18",
+      "category": "UI",
+      "description": "左侧目录、右侧聊天事件流、气泡复盘的形式更接近理想效果。",
+      "key_points": ["适合长内容阅读", "截图后能直接分享", "比单纯卡片堆叠更有现场感"],
+      "url": "https://simonlin000.github.io/qun-riba-20260430/"
+    }
+  ],
+  "important_messages": [
+    {
+      "priority": "高",
+      "sender": "小魏",
+      "time": "15:22",
+      "summary": "仓库介绍必须带截图",
+      "content": "GitHub 仓库的介绍没有截图都不行，至少要有 HTML 预览和长图截图，不然用户不知道装完长什么样。"
+    },
+    {
+      "priority": "中",
+      "sender": "Dont哥",
+      "time": "16:05",
+      "summary": "数据来源要写成多路线",
+      "content": "不要只写 WeFlow，一定把手工导出、WeFlow、本地解密这几条路线都写清楚。"
+    }
+  ],
+  "dialogues": [
+    {
+      "topic": "日报到底应该长什么样",
+      "messages": [
+        {"name": "小魏", "time": "13:58", "content": "这个 UI 太丑了，像临时把几张卡片粘一起。"},
+        {"name": "Dont哥", "time": "13:59", "content": "你要的是能回看聊天现场的日报，不是 PPT 第 38 页。"},
+        {"name": "HOORAY", "time": "14:00", "content": "左边目录，右边事件流，中间夹聊天气泡，这个方向可以。"},
+        {"name": "小魏", "time": "14:02", "content": "对，我希望一打开就知道群里今天发生了什么。"}
+      ],
+      "highlight": "日报不是统计图，是把一整天的群聊重新剪成一条能读的故事线。"
+    },
+    {
+      "topic": "WeFlow 能不能用上",
+      "messages": [
+        {"name": "HOORAY", "time": "10:35", "content": "WeFlow 在导出、解密、年报和本地 API 上都做得更大。"},
+        {"name": "小魏", "time": "10:36", "content": "那是不是只能采取 WeFlow 的方式？"},
+        {"name": "Dont哥", "time": "10:37", "content": "不是。WeFlow 可以作为优先入口，但仓库应该同时支持 JSON/文本输入，这样以后换数据源也不崩。"}
+      ],
+      "highlight": "数据源可以换，日报结构不能跟着塌。"
+    },
+    {
+      "topic": "仓库交付标准",
+      "messages": [
+        {"name": "小魏", "time": "18:21", "content": "你要给仓库命名，写详细介绍，还要告诉我具体怎么用。"},
+        {"name": "Dont哥", "time": "18:22", "content": "README 写安装、数据来源、生成命令、预览截图和参考项目。"},
+        {"name": "小魏", "time": "18:24", "content": "配上一些截图啊大哥。"},
+        {"name": "HOORAY", "time": "18:25", "content": "截图是 README 的脸面。没有截图，项目会显得像还没睡醒。"}
+      ],
+      "highlight": "截图不是装饰，是项目可信度的一部分。"
+    }
+  ],
+  "qas": [
+    {
+      "questioner": "小魏",
+      "question_time": "11:16",
+      "question": "装到 Obsidian 之后，是不是就能直接看到微信聊天记录、文件和资料？",
+      "tags": ["Obsidian", "边界"],
+      "answerer": "Dont哥",
+      "answer_time": "11:20",
+      "answer": "不是自动魔法。Obsidian 端负责展示和检索，微信数据需要先通过手工导出、WeFlow 或本地解密管线整理成 Markdown/JSON/附件目录，再导入 vault。",
+      "is_best": true
+    },
+    {
+      "questioner": "HOORAY",
+      "question_time": "15:08",
+      "question": "日报长图和 HTML 页面都要保留吗？",
+      "tags": ["输出格式", "分享"],
+      "answerer": "小魏",
+      "answer_time": "15:10",
+      "answer": "都要。HTML 适合托管和交互筛选，PNG 适合发群和归档，两个场景不冲突。",
+      "is_best": true
+    },
+    {
+      "questioner": "Dont哥",
+      "question_time": "16:40",
+      "question": "AI 内容应该生成哪些字段？",
+      "tags": ["JSON", "模板"],
+      "answerer": "HOORAY",
+      "answer_time": "16:42",
+      "answer": "至少要有 topics、resources、important_messages、dialogues、qas、talker_profiles。聊天气泡要靠 dialogues，成员筛选要靠名称对齐。",
+      "is_best": true
+    }
+  ],
+  "talker_profiles": {
+    "Dont哥": {
+      "traits": ["路线图导演", "边界感很强", "喜欢把坑提前标出来"]
+    },
+    "小魏": {
+      "traits": ["截图执念", "交付标准拉满", "一眼发现 UI 不对劲"]
+    },
+    "HOORAY": {
+      "traits": ["工具雷达", "技术路线拆解员", "负责把抽象变具体"]
+    }
+  }
+}

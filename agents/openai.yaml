@@ -1,0 +1,4 @@
+interface:
+  display_name: "WeChat Daily Report"
+  short_description: "Generate an interactive WeChat group daily report HTML and shareable PNG"
+  default_prompt: "Generate a WeChat group daily report with this workflow: 1) confirm the data source, 2) produce or reuse stats.json, 3) read references/ai_prompt.md plus the chat text and generate valid ai_content.json, 4) render report.html, 5) render report.png with the desktop daily-report viewport. Do not skip the AI content step, and do not promise Obsidian can directly read WeChat without an export/import pipeline."
