@@ -1,10 +1,36 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>一群日报演示 · 2026-05-01</title>
-  <style>
+#!/usr/bin/env python3
+"""Build an anonymized GitHub Pages demo site.
+
+The public Pages site is only for showing the daily-report experience. It must
+not expose real group names, member names, avatars, chat snippets, links, word
+clouds, or other details from private chats.
+"""
+
+from __future__ import annotations
+
+import argparse
+import html
+from pathlib import Path
+
+
+GROUPS = [
+    ("group-1", "一群"),
+    ("group-2", "二群"),
+    ("group-3", "三群"),
+    ("group-4", "四群"),
+    ("group-5", "五群"),
+]
+
+LEGACY_GROUPS = [
+    ("dontbesilent-money", "一群"),
+    ("pengtao-vip", "二群"),
+    ("yanhua-vip-1", "三群"),
+    ("simonlin-ai", "四群"),
+    ("ai-tools-vibecoding-5", "五群"),
+]
+
+
+CSS = """
 :root {
   color-scheme: light;
   --ink: #18231f;
@@ -126,14 +152,62 @@ h1 {
   .summary, .cards, .hero-grid { grid-template-columns: 1fr; }
   .report-card { grid-template-columns: 1fr; align-items: start; }
 }
-</style>
+"""
+
+
+def write(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def render_index(day: str) -> str:
+    cards = "\n".join(
+        f'''      <a class="report-card" href="reports/{slug}/{day}/index.html"><span class="slug">{label}</span><span class="day">{day}</span><span class="arrow">open</span></a>'''
+        for slug, label in GROUPS
+    )
+    return f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>微信群日报演示</title>
+  <style>{CSS}</style>
 </head>
 <body>
   <main>
-    <div class="eyebrow">Wechat Daily Demo · 2026-05-01</div>
+    <div class="eyebrow">Wechat Daily Demo</div>
+    <h1>微信群日报演示</h1>
+    <p class="lead">这是对外演示页，只展示日报产品形态。真实群名、成员昵称、聊天原文、链接、头像和敏感统计都已隐藏。</p>
+    <section class="summary">
+      <div class="metric"><strong>5</strong><span>演示群组</span></div>
+      <div class="metric"><strong>08:30</strong><span>每天自动运行</span></div>
+      <div class="metric"><strong>0</strong><span>公开聊天原文</span></div>
+    </section>
+    <section class="grid">
+{cards}
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+
+def render_report(day: str, slug: str, title: str) -> str:
+    safe_title = html.escape(title)
+    return f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{safe_title}日报演示 · {day}</title>
+  <style>{CSS}</style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Wechat Daily Demo · {day}</div>
     <section class="hero">
       <div class="eyebrow">匿名群日报</div>
-      <h2>一群日报</h2>
+      <h2>{safe_title}日报</h2>
       <p>公开页面只展示日报样式和信息组织方式。真实群名、成员昵称、头像、聊天原文、链接、词云和具体讨论内容不会出现在这里。</p>
       <div class="hero-grid">
         <div class="hero-metric"><strong>已生成</strong><span>日报状态</span></div>
@@ -166,3 +240,25 @@ h1 {
   </main>
 </body>
 </html>
+"""
+
+
+def build(output: Path, day: str) -> None:
+    write(output / "index.html", render_index(day))
+    for slug, title in GROUPS:
+        write(output / "reports" / slug / day / "index.html", render_report(day, slug, title))
+    for slug, title in LEGACY_GROUPS:
+        write(output / "reports" / slug / day / "index.html", render_report(day, slug, title))
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Build anonymized public demo pages")
+    parser.add_argument("--output", default=".", help="GitHub Pages repository root")
+    parser.add_argument("--date", default="2026-05-01", help="Demo report date")
+    args = parser.parse_args()
+    build(Path(args.output), args.date)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
