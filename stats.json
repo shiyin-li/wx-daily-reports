@@ -1,0 +1,595 @@
+{
+  "meta": {
+    "name": "agent 交流沟通群",
+    "source": "wx",
+    "date": "2026-05-20",
+    "total_count": 64,
+    "active_user_count": 3,
+    "time_range": "08:15 至 10:04"
+  },
+  "top_talkers": [
+    {
+      "rank": 1,
+      "name": "海波",
+      "count": 35,
+      "common_words": [
+        "agent",
+        "基础",
+        "然后",
+        "直接",
+        "模型"
+      ]
+    },
+    {
+      "rank": 2,
+      "name": "白驹过隙",
+      "count": 20,
+      "common_words": [
+        "执行",
+        "工具",
+        "codex",
+        "思考",
+        "有没有"
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "垣生",
+      "count": 9,
+      "common_words": [
+        "引用",
+        "落尽",
+        "梨花",
+        "离开",
+        "互联网"
+      ]
+    }
+  ],
+  "night_owl": null,
+  "word_cloud": [
+    {
+      "text": "agent",
+      "count": 10,
+      "size": 40,
+      "color": "#7a351f",
+      "left": 77,
+      "top": 93,
+      "rotate": 10
+    },
+    {
+      "text": "然后",
+      "count": 5,
+      "size": 26,
+      "color": "#415f8f",
+      "left": 23,
+      "top": 228,
+      "rotate": 3
+    },
+    {
+      "text": "基础",
+      "count": 4,
+      "size": 23,
+      "color": "#287a5b",
+      "left": 69,
+      "top": 49,
+      "rotate": -10
+    },
+    {
+      "text": "模型",
+      "count": 4,
+      "size": 23,
+      "color": "#7a351f",
+      "left": 67,
+      "top": 115,
+      "rotate": -5
+    },
+    {
+      "text": "git",
+      "count": 3,
+      "size": 20,
+      "color": "#d39b35",
+      "left": 21,
+      "top": 230,
+      "rotate": -1
+    },
+    {
+      "text": "工具",
+      "count": 3,
+      "size": 20,
+      "color": "#415f8f",
+      "left": 8,
+      "top": 47,
+      "rotate": -4
+    },
+    {
+      "text": "直接",
+      "count": 3,
+      "size": 20,
+      "color": "#415f8f",
+      "left": 35,
+      "top": 65,
+      "rotate": -8
+    },
+    {
+      "text": "引用",
+      "count": 3,
+      "size": 20,
+      "color": "#d39b35",
+      "left": 16,
+      "top": 106,
+      "rotate": -11
+    },
+    {
+      "text": "重要",
+      "count": 3,
+      "size": 20,
+      "color": "#b45f2a",
+      "left": 27,
+      "top": 253,
+      "rotate": 0
+    },
+    {
+      "text": "循环",
+      "count": 3,
+      "size": 20,
+      "color": "#d39b35",
+      "left": 44,
+      "top": 235,
+      "rotate": 8
+    },
+    {
+      "text": "执行",
+      "count": 3,
+      "size": 20,
+      "color": "#8b5a86",
+      "left": 81,
+      "top": 90,
+      "rotate": 9
+    },
+    {
+      "text": "不断",
+      "count": 3,
+      "size": 20,
+      "color": "#8b5a86",
+      "left": 66,
+      "top": 83,
+      "rotate": 2
+    },
+    {
+      "text": "还好",
+      "count": 2,
+      "size": 17,
+      "color": "#d39b35",
+      "left": 11,
+      "top": 173,
+      "rotate": -10
+    },
+    {
+      "text": "idea",
+      "count": 2,
+      "size": 17,
+      "color": "#287a5b",
+      "left": 43,
+      "top": 164,
+      "rotate": -11
+    },
+    {
+      "text": "但是",
+      "count": 2,
+      "size": 17,
+      "color": "#8b5a86",
+      "left": 53,
+      "top": 53,
+      "rotate": -4
+    },
+    {
+      "text": "local",
+      "count": 2,
+      "size": 17,
+      "color": "#d39b35",
+      "left": 79,
+      "top": 90,
+      "rotate": 2
+    },
+    {
+      "text": "id",
+      "count": 2,
+      "size": 17,
+      "color": "#287a5b",
+      "left": 70,
+      "top": 199,
+      "rotate": -5
+    },
+    {
+      "text": "codex",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 38,
+      "top": 63,
+      "rotate": -11
+    },
+    {
+      "text": "里面",
+      "count": 2,
+      "size": 17,
+      "color": "#7a351f",
+      "left": 82,
+      "top": 108,
+      "rotate": -7
+    },
+    {
+      "text": "审查",
+      "count": 2,
+      "size": 17,
+      "color": "#7a351f",
+      "left": 82,
+      "top": 250,
+      "rotate": 8
+    },
+    {
+      "text": "看看",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 35,
+      "top": 162,
+      "rotate": 10
+    },
+    {
+      "text": "初升",
+      "count": 2,
+      "size": 17,
+      "color": "#8b5a86",
+      "left": 83,
+      "top": 164,
+      "rotate": -5
+    },
+    {
+      "text": "太阳",
+      "count": 2,
+      "size": 17,
+      "color": "#7a351f",
+      "left": 11,
+      "top": 232,
+      "rotate": 5
+    },
+    {
+      "text": "搞完",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 41,
+      "top": 233,
+      "rotate": -6
+    },
+    {
+      "text": "白驹过隙",
+      "count": 2,
+      "size": 17,
+      "color": "#287a5b",
+      "left": 28,
+      "top": 107,
+      "rotate": 2
+    },
+    {
+      "text": "室友",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 79,
+      "top": 200,
+      "rotate": 2
+    },
+    {
+      "text": "出来",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 34,
+      "top": 186,
+      "rotate": 9
+    },
+    {
+      "text": "13",
+      "count": 2,
+      "size": 17,
+      "color": "#d39b35",
+      "left": 31,
+      "top": 46,
+      "rotate": 6
+    },
+    {
+      "text": "修改",
+      "count": 2,
+      "size": 17,
+      "color": "#7a351f",
+      "left": 25,
+      "top": 200,
+      "rotate": 1
+    },
+    {
+      "text": "建议",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 36,
+      "top": 171,
+      "rotate": -1
+    },
+    {
+      "text": "不改",
+      "count": 2,
+      "size": 17,
+      "color": "#415f8f",
+      "left": 69,
+      "top": 112,
+      "rotate": -7
+    },
+    {
+      "text": "终于",
+      "count": 2,
+      "size": 17,
+      "color": "#8b5a86",
+      "left": 63,
+      "top": 197,
+      "rotate": 8
+    },
+    {
+      "text": "知道",
+      "count": 2,
+      "size": 17,
+      "color": "#287a5b",
+      "left": 77,
+      "top": 141,
+      "rotate": -2
+    },
+    {
+      "text": "落尽",
+      "count": 2,
+      "size": 17,
+      "color": "#8b5a86",
+      "left": 87,
+      "top": 194,
+      "rotate": 12
+    },
+    {
+      "text": "梨花",
+      "count": 2,
+      "size": 17,
+      "color": "#287a5b",
+      "left": 47,
+      "top": 54,
+      "rotate": 3
+    },
+    {
+      "text": "主要",
+      "count": 2,
+      "size": 17,
+      "color": "#d39b35",
+      "left": 52,
+      "top": 170,
+      "rotate": 2
+    },
+    {
+      "text": "输出",
+      "count": 2,
+      "size": 17,
+      "color": "#b45f2a",
+      "left": 56,
+      "top": 69,
+      "rotate": -11
+    },
+    {
+      "text": "思考",
+      "count": 2,
+      "size": 17,
+      "color": "#8b5a86",
+      "left": 33,
+      "top": 97,
+      "rotate": -11
+    },
+    {
+      "text": "好像",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 69,
+      "top": 170,
+      "rotate": -1
+    },
+    {
+      "text": "框架",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 59,
+      "top": 148,
+      "rotate": 12
+    },
+    {
+      "text": "查不多",
+      "count": 1,
+      "size": 14,
+      "color": "#b45f2a",
+      "left": 9,
+      "top": 60,
+      "rotate": -6
+    },
+    {
+      "text": "对应",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 40,
+      "top": 74,
+      "rotate": 1
+    },
+    {
+      "text": "hello",
+      "count": 1,
+      "size": 14,
+      "color": "#b45f2a",
+      "left": 79,
+      "top": 188,
+      "rotate": -2
+    },
+    {
+      "text": "封装",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 72,
+      "top": 177,
+      "rotate": 1
+    },
+    {
+      "text": "longchain",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 34,
+      "top": 58,
+      "rotate": -12
+    },
+    {
+      "text": "longparch",
+      "count": 1,
+      "size": 14,
+      "color": "#d39b35",
+      "left": 24,
+      "top": 79,
+      "rotate": -12
+    },
+    {
+      "text": "harmess",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 19,
+      "top": 72,
+      "rotate": 8
+    },
+    {
+      "text": "工作",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 68,
+      "top": 89,
+      "rotate": 11
+    },
+    {
+      "text": "离开",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 22,
+      "top": 110,
+      "rotate": 1
+    },
+    {
+      "text": "互联网",
+      "count": 1,
+      "size": 14,
+      "color": "#b45f2a",
+      "left": 45,
+      "top": 164,
+      "rotate": 1
+    },
+    {
+      "text": "四天",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 81,
+      "top": 83,
+      "rotate": -11
+    },
+    {
+      "text": "巨变",
+      "count": 1,
+      "size": 14,
+      "color": "#7a351f",
+      "left": 88,
+      "top": 86,
+      "rotate": -9
+    },
+    {
+      "text": "这些",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 63,
+      "top": 251,
+      "rotate": -7
+    },
+    {
+      "text": "之前",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 43,
+      "top": 152,
+      "rotate": -9
+    },
+    {
+      "text": "有没有",
+      "count": 1,
+      "size": 14,
+      "color": "#415f8f",
+      "left": 20,
+      "top": 241,
+      "rotate": -8
+    },
+    {
+      "text": "可视化",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 46,
+      "top": 141,
+      "rotate": 11
+    },
+    {
+      "text": "我用",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 26,
+      "top": 147,
+      "rotate": 10
+    },
+    {
+      "text": "最好",
+      "count": 1,
+      "size": 14,
+      "color": "#8b5a86",
+      "left": 23,
+      "top": 64,
+      "rotate": -3
+    },
+    {
+      "text": "记得",
+      "count": 1,
+      "size": 14,
+      "color": "#287a5b",
+      "left": 85,
+      "top": 206,
+      "rotate": 1
+    },
+    {
+      "text": "别的",
+      "count": 1,
+      "size": 14,
+      "color": "#7a351f",
+      "left": 76,
+      "top": 221,
+      "rotate": 5
+    }
+  ],
+  "name_avatar_map": {},
+  "raw_text_paths": [
+    "simplified_chat.txt"
+  ]
+}
