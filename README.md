@@ -190,6 +190,47 @@ python3 scripts/generate_report.py \
   --device-scale-factor 2
 ```
 
+### 5. 发布到 GitHub Pages
+
+如果你想把最新生成的 `report.html` 发成一个链接给群友，可以直接发布到 GitHub Pages。
+
+先把本地生成结果整理成可发布站点：
+
+```bash
+python3 scripts/build_pages_site.py \
+  --report-html report.html \
+  --report-png report.png \
+  --stats stats.json \
+  --output site
+```
+
+这一步会生成：
+
+- `site/index.html`：对外分享入口页
+- `site/report.html`：最新 HTML 正文
+- `site/report.png`：最新长图（如果存在）
+- `site/reports/YYYY-MM-DD/index.html`：按日期归档的 HTML
+
+仓库内已提供 GitHub Actions 工作流：
+
+```text
+.github/workflows/deploy-pages.yml
+```
+
+使用方式：
+
+1. 在 GitHub 仓库设置里启用 Pages，并把 Source 设为 GitHub Actions
+2. 本地生成 `report.html`、`report.png`、`stats.json`
+3. 提交并推送这些文件到 `main` 或 `master`
+4. GitHub 会自动运行 `deploy-pages.yml`，把页面发布出去
+
+发布完成后，你就可以把 GitHub Pages 链接直接发给群友。
+
+注意：
+
+- GitHub Pages 更适合公开或半公开内容，默认不适合放非常敏感的真实聊天内容
+- 如果只想分享给熟人，也建议先确认页面里没有不适合外发的群名、头像、原话或链接
+
 ## 放进 Obsidian
 
 推荐目录：
