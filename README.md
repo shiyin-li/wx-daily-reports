@@ -231,6 +231,51 @@ python3 scripts/build_pages_site.py \
 - GitHub Pages 更适合公开或半公开内容，默认不适合放非常敏感的真实聊天内容
 - 如果只想分享给熟人，也建议先确认页面里没有不适合外发的群名、头像、原话或链接
 
+### 6. 手动立即跑一次
+
+如果你想不等定时任务，立刻拉取一次指定群的“昨天整天”消息并生成、提交、推送日报，可以直接运行：
+
+```bash
+python3 scripts/run_daily_report_once.py \
+  --chatroom "agent 交流沟通群"
+```
+
+它会自动完成：
+
+- 拉取昨天整天的群消息
+- 生成 `stats.json`
+- 调用 OpenAI API 生成 `ai_content.json`
+- 渲染 `report.html` 和 `report.png`
+- 自动 `git commit` 和 `git push`
+
+如果你只想先生成文件，不想提交推送：
+
+```bash
+python3 scripts/run_daily_report_once.py \
+  --chatroom "agent 交流沟通群" \
+  --skip-commit
+```
+
+如果你想指定日期手动补跑：
+
+```bash
+python3 scripts/run_daily_report_once.py \
+  --chatroom "agent 交流沟通群" \
+  --date 2026-05-20
+```
+
+运行前需要先配置 OpenAI API Key：
+
+```bash
+export OPENAI_API_KEY="你的 key"
+```
+
+Windows PowerShell：
+
+```powershell
+$env:OPENAI_API_KEY="你的 key"
+```
+
 ## 放进 Obsidian
 
 推荐目录：

@@ -14,6 +14,23 @@ description: 生成微信群聊日报。优先用 jackwener/wx-cli 获取本地�
 
 ## 工作流
 
+### 0. 默认执行模式
+
+当用户直接说“运行这个 skill”“生成日报”“拉取昨天群消息并发日报”，且没有明确要求只预览、不提交或不推送时：
+
+- 默认优先运行 `scripts/run_daily_report_once.py`
+- 默认会自动生成 `stats.json`、`ai_content.json`、`report.html`、`report.png`
+- 默认会自动执行 `git commit` 和 `git push`
+- 默认按 Asia/Shanghai 时区处理“昨天整天”
+
+如果用户没有指定群名，并且当前上下文也没有别的约束，默认群名使用：
+
+```text
+agent 交流沟通群
+```
+
+只有在用户明确说“不要推送”“只生成文件”“先别提交”时，才改用 `--skip-push` 或 `--skip-commit`。
+
 ### 1. 确认数据来源
 
 优先根据用户已有数据选择路线：
@@ -27,6 +44,15 @@ description: 生成微信群聊日报。优先用 jackwener/wx-cli 获取本地�
 不要默认承诺“安装到 Obsidian 后自动打通微信”。本 skill 负责生成日报素材；Obsidian 侧是归档和浏览。
 
 ### 2. wx-cli 路线
+
+对于“直接运行完整日报流程”的请求，优先不要手工拆步骤，直接执行：
+
+```bash
+python3 scripts/run_daily_report_once.py \
+  --chatroom "agent 交流沟通群"
+```
+
+这条命令默认会自动推送到 GitHub。
 
 ```bash
 wx sessions
